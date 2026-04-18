@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sharu ♥</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+/* ════════════════════════════════════
+   ROOT & RESET
+════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink: #05030a;
+  --red: #7a1212;
+  --red2: #b02020;
+  --red3: #d4453a;
+  --gold: #c9a454;
+  --gold2: #e8cf8e;
+  --gold3: #f5e8c0;
+  --offwhite: #f2ece0;
+  --offwhite2: #e8dfc8;
+  --cream: #faf6ee;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden;
+  color: var(--cream);
+  cursor: none;
+}
+
+/* Film-grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9990;
+}
+
+/* ── CURSOR ── */
+#cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+}
+#cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,164,84,0.45);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: left 0.14s ease, top 0.14s ease;
+}
+
+/* ── VIGNETTE ── */
+#vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 38%, rgba(0,0,0,0.8) 100%);
+  pointer-events: none;
+  z-index: 9989;
+}
+
+/* ── PARTICLE CANVAS ── */
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.55;
+}
+
+/* ── TICKER ── */
+.ticker-wrap {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%;
+  z-index: 9988;
+  border-top: 1px solid rgba(201,164,84,0.12);
+  background: rgba(5,3,10,0.88);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 32s linear infinite;
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-item {
+  font-family: 'IM Fell English SC', serif;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.4;
+  padding: 0 36px;
+}
+.ticker-dot { color: var(--red2); opacity: 0.5; font-size: 8px; padding: 0 8px; }
+
+/* ════════════════════════════════════
+   SECTION 1 — LANDING / HERO
+════════════════════════════════════ */
+.section-hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Corner borders */
+.corner {
+  position: absolute;
+  width: 72px; height: 72px;
+  border-color: var(--gold);
+  border-style: solid;
+  opacity: 0;
+  animation: fadeIn 1.4s forwards;
+}
+.corner.tl { top: 24px; left: 24px; border-width: 1px 0 0 1px; animation-delay: 0.6s; }
+.corner.tr { top: 24px; right: 24px; border-width: 1px 1px 0 0; animation-delay: 0.7s; }
+.corner.bl { bottom: 44px; left: 24px; border-width: 0 0 1px 1px; animation-delay: 0.8s; }
+.corner.br { bottom: 44px; right: 24px; border-width: 0 1px 1px 0; animation-delay: 0.9s; }
+@keyframes fadeIn { to { opacity: 0.4; } }
+
+.hero-content {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: heroEntrance 2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+}
+@keyframes heroEntrance {
+  from { opacity: 0; transform: translateY(-32px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hero-pretext {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(18px, 2.8vw, 36px);
+  color: var(--gold2);
+  letter-spacing: 2px;
+  opacity: 0.75;
+}
+.hero-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 2px 0;
+  opacity: 0.6;
+}
+.rule-line {
+  width: clamp(40px, 8vw, 120px);
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+.rule-line.r { background: linear-gradient(to left, transparent, var(--gold)); }
+.diamond {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0.8;
+}
+.hero-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(42px, 10vw, 138px);
+  font-weight: 700;
+  letter-spacing: clamp(8px, 2vw, 28px);
+  line-height: 1;
+  color: transparent;
+  background: linear-gradient(160deg, #f5e8c0 0%, #c9a454 30%, #e8cf8e 55%, #9a7030 80%, #f5e8c0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  position: relative;
+}
+.hero-name::before {
+  content: 'SHARU';
+  position: absolute;
+  inset: 0;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: inherit;
+  font-weight: 700;
+  letter-spacing: inherit;
+  color: var(--red2);
+  filter: blur(30px);
+  opacity: 0.2;
+  z-index: -1;
+  -webkit-text-fill-color: var(--red2);
+}
+.hero-subtext {
+  font-family: 'IM Fell English SC', serif;
+  font-size: clamp(10px, 1.3vw, 15px);
+  letter-spacing: clamp(4px, 1.5vw, 10px);
+  text-transform: uppercase;
+  color: var(--red3);
+  opacity: 0.85;
+  margin-top: 4px;
+}
+.hero-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(13px, 1.4vw, 18px);
+  color: var(--gold2);
+  opacity: 0.45;
+  margin-top: 8px;
+}
+
+/* Scroll cue */
+.scroll-cue {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  animation: floatDown 2.8s ease-in-out infinite;
+}
+@keyframes floatDown {
+  0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+  50%       { opacity: 0.9; transform: translateX(-50%) translateY(9px); }
+}
+.scroll-cue span {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 8px;
+  letter-spacing: 5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.scroll-cue svg {
+  width: 18px; height: 18px;
+  stroke: var(--gold);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.6;
+}
+
+/* ════════════════════════════════════
+   SECTION 2 — CENTER IMAGE FIXED + SCROLL LANES
+   ─ Changed from auto-animation to GSAP scroll ─
+   Outer section is tall (300vh) so ScrollTrigger
+   has scrollable distance. Inner .float-stage is
+   sticky and pins the viewport while cards travel.
+════════════════════════════════════ */
+.section-float {
+  position: relative;
+  /* tall so scroll has room — more images now */
+  height: 500vh;
+  z-index: 10;
+}
+
+/* NEW: sticky inner stage */
+.float-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Center image — z-index 40, always on top of lane cards */
+.float-center {
+  position: relative;
+  z-index: 40;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.float-center img {
+  width: clamp(160px, 22vw, 280px);
+  display: block;
+  background: var(--offwhite);
+  padding: 8px 8px 44px;
+  box-shadow:
+    0 2px 0 1px var(--offwhite2),
+    0 30px 90px rgba(0,0,0,0.95),
+    inset 0 0 0 1px rgba(255,255,255,0.55);
+  filter: sepia(0.06) contrast(1.06) brightness(0.95);
+}
+
+/* Floating lane container — unchanged div structure */
+.float-lanes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  overflow: hidden;
+}
+
+/* CHANGED: removed CSS animation — GSAP drives translateY now */
+.lane {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  will-change: transform;
+}
+.lane-left  { left: clamp(10px, 5vw, 80px); }
+.lane-right { right: clamp(10px, 5vw, 80px); }
+
+.lane-card {
+  background: var(--offwhite);
+  padding: 5px 5px 30px;
+  width: clamp(100px, 14vw, 180px);
+  box-shadow:
+    0 2px 0 1px var(--offwhite2),
+    0 16px 50px rgba(0,0,0,0.9),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+  opacity: 0.92;
+  flex-shrink: 0;
+}
+.lane-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  filter: sepia(0.1) contrast(1.04) brightness(0.95);
+}
+
+/* ════════════════════════════════════
+   SECTION 4 — SPLIT SCROLL
+════════════════════════════════════ */
+.section-split {
+  display: flex;
+  min-height: 600vh;
+  position: relative;
+  z-index: 10;
+}
+.section-split::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(176,32,32,0.3) 20%, rgba(176,32,32,0.3) 80%, transparent);
+}
+
+.split-left {
+  width: 50%;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 48px;
+  overflow: hidden;
+}
+.split-left::before {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(122,18,18,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.left-frame { position: relative; }
+.left-frame img {
+  width: clamp(180px, 22vw, 270px);
+  display: block;
+  background: var(--offwhite);
+  padding: 7px 7px 42px;
+  box-shadow:
+    0 2px 0 1px var(--offwhite2),
+    0 30px 85px rgba(0,0,0,0.95),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+  filter: sepia(0.08) contrast(1.06) brightness(0.94);
+}
+.left-frame::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(135deg, var(--red) 0%, transparent 40%, transparent 60%, var(--gold) 100%);
+  opacity: 0.18;
+  z-index: -1;
+}
+.left-poem {
+  text-align: center;
+  max-width: 280px;
+}
+.left-poem p {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(17px, 2vw, 24px);
+  color: var(--gold3);
+  line-height: 1.8;
+  opacity: 0.88;
+}
+.left-poem cite {
+  display: block;
+  margin-top: 14px;
+  font-family: 'IM Fell English SC', serif;
+  font-size: clamp(9px, 0.9vw, 12px);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--red3);
+  opacity: 0.55;
+  font-style: normal;
+}
+
+.split-right {
+  width: 50%;
+  padding: 90px 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.r-item {
+  margin-bottom: 100px;
+  position: relative;
+  padding-left: 28px;
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.r-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.r-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 1px; height: 100%;
+  background: linear-gradient(to bottom, var(--red), transparent);
+  opacity: 0.4;
+}
+.r-item img {
+  width: 100%;
+  display: block;
+  background: var(--offwhite);
+  padding: 6px 6px 38px;
+  box-shadow:
+    0 2px 0 1px var(--offwhite2),
+    0 22px 65px rgba(0,0,0,0.92),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+  filter: sepia(0.08) contrast(1.06) brightness(0.94);
+  transition: filter 0.4s, transform 0.4s;
+}
+.r-item img:hover {
+  filter: sepia(0) contrast(1.09) brightness(1.01);
+  transform: scale(1.012);
+}
+.r-meta {
+  margin-top: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.r-idx {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--red2);
+  opacity: 0.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.r-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(15px, 1.6vw, 20px);
+  color: var(--gold2);
+  opacity: 0.82;
+  line-height: 1.3;
+}
+
+/* ════════════════════════════════════
+   SECTION 6 — FINALE
+════════════════════════════════════ */
+.section-finale {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 40px 100px;
+  gap: 22px;
+  overflow: hidden;
+}
+.section-finale::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(122,18,18,0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 30% at 20% 80%, rgba(201,164,84,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.ornament-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0.5;
+}
+.h-line { width: clamp(30px, 6vw, 90px); height: 1px; background: linear-gradient(to right, transparent, var(--gold)); }
+.h-line.r { background: linear-gradient(to left, transparent, var(--gold)); }
+.ornament-row span {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(22px, 2.8vw, 32px);
+  color: var(--gold);
+}
+
+.finale-label {
+  font-family: 'IM Fell English SC', serif;
+  font-size: clamp(10px, 1vw, 13px);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: var(--red3);
+  opacity: 0;
+  animation: fadeSlideUp 1.2s ease forwards;
+}
+.finale-wish {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(52px, 9.5vw, 124px);
+  line-height: 1.15;
+  color: var(--cream);
+  opacity: 0;
+  animation: fadeSlideUp 1.2s ease 0.15s forwards;
+}
+.finale-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(28px, 5.5vw, 76px);
+  font-weight: 700;
+  letter-spacing: clamp(6px, 2vw, 22px);
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #f5e8c0 0%, var(--gold) 35%, #e8cf8e 55%, #9a7030 80%, #f5e8c0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  animation: fadeSlideUp 1.2s ease 0.3s forwards;
+}
+.finale-message {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(16px, 1.9vw, 23px);
+  color: var(--gold3);
+  opacity: 0;
+  max-width: 560px;
+  line-height: 2;
+  animation: fadeSlideUp 1.2s ease 0.45s forwards;
+}
+.heart-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  opacity: 0;
+  animation: fadeSlideUp 1.2s ease 0.6s forwards;
+}
+.h-beat {
+  color: var(--red2);
+  font-size: clamp(20px, 2.5vw, 32px);
+  line-height: 1;
+  animation: throb 2s ease-in-out infinite;
+}
+.h-beat:nth-child(1) { animation-delay: 0s;    font-size: 0.8em; }
+.h-beat:nth-child(2) { animation-delay: 0.25s; font-size: 1.3em; }
+.h-beat:nth-child(3) { animation-delay: 0.5s;  font-size: 0.8em; }
+@keyframes throb {
+  0%, 100% { transform: scale(1); opacity: 0.65; }
+  50%       { transform: scale(1.45); opacity: 1; }
+}
+.finale-sig {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(18px, 2.2vw, 28px);
+  color: var(--gold);
+  opacity: 0;
+  letter-spacing: 1px;
+  animation: fadeSlideUp 1.2s ease 0.75s forwards;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 0.85; transform: translateY(0); }
+}
+/* Override for specific elements that need full opacity */
+.finale-wish { animation-name: fadeSlideUpFull; }
+.finale-name { animation-name: fadeSlideUpFull; }
+@keyframes fadeSlideUpFull {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media (max-width: 768px) {
+  .section-split { flex-direction: column; min-height: auto; }
+  .split-left {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 48px 24px 32px;
+  }
+  .split-right { width: 100%; padding: 20px 24px 60px; }
+  .r-item { margin-bottom: 60px; }
+  .lane-left  { left: 8px; }
+  .lane-right { right: 8px; }
+  .lane-card { width: clamp(80px, 20vw, 140px); }
+
+}
+
+@media (max-width: 480px) {
+  .section-split::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Vignette overlay -->
+<div id="vignette"></div>
+
+<!-- Particle canvas -->
+<canvas id="particles"></canvas>
+
+<!-- Bottom ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 1 — HERO / LANDING
+══════════════════════════════════ -->
+<section class="section-hero" id="hero">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="hero-content">
+    <div class="hero-pretext">for the one who is my world</div>
+    <div class="hero-rule">
+      <div class="rule-line"></div>
+      <span class="diamond"></span>
+      <div class="rule-line r"></div>
+    </div>
+    <div class="hero-name">SHARU</div>
+    <div class="hero-rule">
+      <div class="rule-line"></div>
+      <span class="diamond"></span>
+      <div class="rule-line r"></div>
+    </div>
+    <div class="hero-subtext">Happy Birthday rane</div>
+    <div class="hero-date">with every piece of me ∞</div>
+  </div>
+
+  <!-- <div class="scroll-cue" onclick="document.getElementById('float-section').scrollIntoView({behavior:'smooth'})">
+    <span>scroll</span>
+    <svg viewBox="0 0 20 20"><polyline points="4,7 10,13 16,7"/></svg>
+  </div> -->
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 2 — CENTER IMAGE FIXED + SCROLL LANES
+     Outer section is 300vh tall.
+     Inner .float-stage sticks to viewport.
+     Lane divs are the same as before —
+     GSAP ScrollTrigger moves them upward on scroll.
+══════════════════════════════════ -->
+<section class="section-float" id="float-section">
+
+  <!-- NEW sticky wrapper — lanes + center live inside -->
+  <div class="float-stage">
+
+    <!-- Same lane divs as original -->
+    <div class="float-lanes">
+      <div class="lane lane-left"  id="laneLeft"></div>
+      <div class="lane lane-right" id="laneRight"></div>
+    </div>
+
+    <!-- Center image — same div, now z-index:40 so always on top -->
+    <div class="float-center">
+      <img src="./main-ng.png" alt="Sharu">
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- ══════════════════════════════════
+     SECTION 4 — SPLIT SCROLL
+     Left: sticky image + quote
+     Right: chapters scroll into view using images 29-49
+══════════════════════════════════ -->
+<section class="section-split" id="split-section">
+  <div class="split-left">
+    <div class="left-frame">
+      <img src="./15.jpeg" alt="" onerror="this.src='https://placehold.co/270x320/f2ece0/8a7a60?text=♥'">
+    </div>
+    <div class="left-poem">
+      <p>"I have found the one whom my soul loves."</p>
+    </div>
+  </div>
+  <div class="split-right" id="splitRight">
+    <div class="r-item">
+      <img src="./9.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">The day my whole life changed</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./24.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">Every laugh echoes still</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./49.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">The adventures we chased</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./35.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">You, always glowing</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./45.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">Every moment, a favourite memory</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./5.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">Smiles that could light up rooms</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./41.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">Wild, free and endlessly beautiful</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./1.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">The girl who stole my heart</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./13.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">Forever isn't long enough</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./19.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">My favourite everything</span></div>
+    </div>
+    <div class="r-item">
+      <img src="./11.jpeg" alt="">
+      <div class="r-meta"><span class="r-text">Happy Birthday ♥</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 5 — FINALE
+══════════════════════════════════ -->
+<section class="section-finale" id="finale">
+  <div class="ornament-row">
+    <div class="h-line"></div><span>♥</span><div class="h-line r"></div>
+  </div>
+  <div class="finale-label">a birthday letter</div>
+  <div class="finale-wish">Happy Birthday</div>
+  <div class="finale-name">Sharu</div>
+  <div class="finale-message">
+    You are the warmth in every cold room,<br>
+    the colour in every grey day.<br>
+    May this year hold everything you deserve —<br>
+    which is nothing short of everything.
+  </div>
+  <div class="heart-row">
+    <span class="h-beat">♥</span>
+    <span class="h-beat">♥</span>
+    <span class="h-beat">♥</span>
+  </div>
+  <div class="finale-sig">with every piece of me ∞</div>
+  <div class="ornament-row" style="transform:scaleX(-1)">
+    <div class="h-line"></div><span>♥</span><div class="h-line r"></div>
+  </div>
+</section>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ═══════════════════════════
+   CURSOR  — unchanged
+═══════════════════════════ */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left  = mx + 'px'; cur.style.top  = my + 'px';
+  ring.style.left = mx + 'px'; ring.style.top = my + 'px';
+});
+
+/* ═══════════════════════════
+   PARTICLE CANVAS  — unchanged
+═══════════════════════════ */
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const PTS = Array.from({ length: 60 }, (_, i) => ({
+  x: Math.random() * 1600, y: Math.random() * 900,
+  size: i < 38 ? 1 + Math.random() * 2.5 : 3 + Math.random() * 5,
+  type: i < 38 ? 'ember' : 'petal',
+  speed: 0.3 + Math.random() * 0.75,
+  drift: (Math.random() - 0.5) * 0.45,
+  rot: Math.random() * Math.PI * 2,
+  rotSpeed: (Math.random() - 0.5) * 0.022,
+  alpha: 0.08 + Math.random() * 0.3,
+  color: i < 38
+    ? `rgba(${180 + Math.random()*60|0},${55 + Math.random()*40|0},${15 + Math.random()*25|0},`
+    : `rgba(${100 + Math.random()*55|0},${8  + Math.random()*20|0},${8  + Math.random()*20|0},`
+}));
+function drawPetal(p) {
+  ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+  ctx.beginPath(); ctx.moveTo(0, 0);
+  ctx.bezierCurveTo(p.size*.8, -p.size*1.4, p.size*1.8, -p.size*.6, p.size*1.2, p.size*.8);
+  ctx.bezierCurveTo(p.size*.4,  p.size*1.4, -p.size*.4,  p.size*.6, 0, 0);
+  ctx.fillStyle = p.color + p.alpha + ')'; ctx.fill(); ctx.restore();
+}
+(function animP() {
+  ctx.clearRect(0, 0, W, H);
+  PTS.forEach(p => {
+    p.y -= p.speed; p.x += p.drift; p.rot += p.rotSpeed;
+    if (p.y < -20)    { p.y = H + 20; p.x = Math.random() * W; }
+    if (p.x < -20)    p.x = W + 20;
+    if (p.x > W + 20) p.x = -20;
+    if (p.type === 'ember') {
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fillStyle = p.color + p.alpha + ')'; ctx.fill();
+    } else { drawPetal(p); }
+  });
+  requestAnimationFrame(animP);
+})();
+
+/* ═══════════════════════════
+   TICKER  — unchanged
+═══════════════════════════ */
+const msgs = [
+  'Happy Birthday Sharu', 'You are so loved', 'My favourite person',
+  'Today is all yours', 'Every day with you is magic',
+  'A thousand wishes', 'My heart, always'
+];
+const track = document.getElementById('ticker');
+const repeated = [...msgs, ...msgs];
+track.innerHTML = repeated.map(m =>
+  `<span class="ticker-item">${m}</span><span class="ticker-dot">♥</span>`
+).join('') + repeated.map(m =>
+  `<span class="ticker-item">${m}</span><span class="ticker-dot">♥</span>`
+).join('');
+
+/* ═══════════════════════════
+   ALL 49 IMAGES
+   Left lane:  odd-numbered  (1,3,5,...,49) = 25 images
+   Right lane: even-numbered (2,4,6,...,48) = 24 images
+   Split scroll right column: images 20–28 (9 curated)
+═══════════════════════════ */
+
+// Build full list — images are .jpeg except check for known .png
+function imgSrc(n) {
+  // From your folder: all are .jpeg. Add exceptions here if needed.
+  return n + '.jpeg';
+}
+
+const LEFT_IMGS  = [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49].map(imgSrc);
+const RIGHT_IMGS = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48].map(imgSrc);
+
+function buildLane(laneEl, images) {
+  // Repeat twice for enough scroll height
+  for (let rep = 0; rep < 2; rep++) {
+    images.forEach(src => {
+      const card = document.createElement('div');
+      card.className = 'lane-card';
+      const img = document.createElement('img');
+      img.src = './' + src;
+      img.alt = '';
+      card.appendChild(img);
+      laneEl.appendChild(card);
+    });
+  }
+}
+
+buildLane(document.getElementById('laneLeft'),  LEFT_IMGS);
+buildLane(document.getElementById('laneRight'), RIGHT_IMGS);
+
+/* ═══════════════════════════
+   GSAP — init after full page load
+   so all element heights are accurate
+═══════════════════════════ */
+window.addEventListener('load', () => {
+
+  /* ── Section 2: lanes scroll bottom → top on scrub ── */
+  const laneLeft  = document.getElementById('laneLeft');
+  const laneRight = document.getElementById('laneRight');
+
+  // Offset lanes so they start below center — cards scroll INTO view
+  gsap.set(laneLeft,  { y: '55vh' });
+  gsap.set(laneRight, { y: '25vh' }); // staggered start
+
+  gsap.to(laneLeft, {
+    y: () => -(laneLeft.scrollHeight * 0.55),
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.section-float',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1.2,
+    }
+  });
+
+  gsap.to(laneRight, {
+    y: () => -(laneRight.scrollHeight * 0.55),
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.section-float',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1.8, // slightly slower → feels out-of-sync / organic
+    }
+  });
+
+  ScrollTrigger.refresh();
+});
+
+/* ═══════════════════════════
+   SPLIT RIGHT — fixed reveal
+   threshold 0 + generous rootMargin so items
+   trigger reliably inside the tall flex container
+═══════════════════════════ */
+(function initSplitReveal() {
+  const items = document.querySelectorAll('.r-item');
+
+  // Fallback: if IO never fires (e.g. items already in view), reveal after 800ms
+  const fallback = setTimeout(() => {
+    items.forEach(el => el.classList.add('visible'));
+  }, 800);
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        clearTimeout(fallback);
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+
+  items.forEach(el => io.observe(el));
+})();
+
+/* ═══════════════════════════
+   FINALE  — unchanged
+═══════════════════════════ */
+(function initFinale() {
+  const finale = document.getElementById('finale');
+  const animated = finale.querySelectorAll('.finale-label,.finale-wish,.finale-name,.finale-message,.heart-row,.finale-sig');
+  animated.forEach(el => { el.style.animationPlayState = 'paused'; });
+  const io = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      animated.forEach(el => { el.style.animationPlayState = 'running'; });
+      io.disconnect();
+    }
+  }, { threshold: 0.3 });
+  io.observe(finale);
+})();
+
+/* ═══════════════════════════
+   SMOOTH SCROLL  — unchanged
+═══════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
